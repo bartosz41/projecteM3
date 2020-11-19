@@ -8,6 +8,7 @@ public class Gestor {
         String[] nomEquips = new String[4];
         String[] jugadorsEquip = new String[12];
         int[] puntsEquips = new int[4];
+        int[] victoriesEq = new int[nomEquips.length];
         String equip;
         int contador = 0;
         int opcio;
@@ -30,10 +31,9 @@ public class Gestor {
             System.out.println("1 - Entrar un equip / Entrar un jugador.");
             System.out.println("2 - Editar un equip.");
             System.out.println("3 - Esborrar un equip.");
-            System.out.println("4 - Veure rànking (Ordenat aflabèticament).");
-            System.out.println("5 - Llistar tots els equips (Ordenat aflabèticament).");
-            System.out.println("6 - Llistar jugadors registrats (Abans heu de registrar algun jugador).");
-            System.out.println("7 - COMENÇAR TEMPORADA!");
+            System.out.println("4 - Llistar tots els equips (Ordenat aflabèticament).");
+            System.out.println("5 - Llistar jugadors registrats (Abans heu de registrar algun jugador).");
+            System.out.println("6 - COMENÇAR TEMPORADA!");
 
             opcio = sc.nextInt();
             sc.nextLine();
@@ -121,7 +121,7 @@ public class Gestor {
                 case 3:
                     System.out.println("Introdueix el nom de l'equip a esborrar: ");
                     String equipAEsborrar = sc.nextLine();
-                    boolean trobat=false;
+                    boolean trobat = false;
                     for (int i = 0; i < nomEquips.length; i++) {
                         if (nomEquips[i].equals(equipAEsborrar)) {
                             trobat = true;
@@ -138,25 +138,13 @@ public class Gestor {
                                 continue;
                             }
                         }
-                        if (i==nomEquips.length-1 && !trobat){
-                                System.out.println("Equip no trobat. ");
+                        if (i == nomEquips.length - 1 && !trobat) {
+                            System.out.println("Equip no trobat. ");
                         }
                     }
                     break;
                 case 4:
-                    System.out.println("#######");
-                    System.out.println("RÀNKING");
-                    System.out.println("#######");
-                    System.out.println();
-                    for (int i = 0; i < contador; i++) {
-                        if (nomEquips[i] != null) {
-                            Arrays.sort(nomEquips);
-                            System.out.println((i + 1) + " - " + nomEquips[i] + " punts: " + puntsEquips[i]);
-                        }
-                    }
-                    break;
-                case 5:
-                    System.out.println("Total de equips: "+contador);
+                    System.out.println("Total de equips: " + contador);
                     int index = 0;
                     System.out.println("##################");
                     System.out.println("Equips registrats.");
@@ -167,25 +155,49 @@ public class Gestor {
                     } else {
                         for (int i = 0; i < nomEquips.length; i++) {
                             if (nomEquips[i] != null) {
-                                System.out.println((index + 1) + " - " + (nomEquips[i]));
+                                System.out.println((index + 1) + " - " + (nomEquips[i]+". Victòries: "+victoriesEq[i]));
                                 index++;
                             }
                         }
                     }
                     break;
-                case 6:
-                    System.out.println("Total jugadors: "+contadorJugadors);
+                case 5:
+                    System.out.println("Total jugadors: " + contadorJugadors);
                     for (int i = 0; i < jugadorsEquip.length; i++) {
                         if (jugadorsEquip[i] != null) {
                             System.out.println((i + 1) + " - " + jugadorsEquip[i]);
                         }
                     }
                     break;
-                case 7:
-                    for (int i = 0; i < nomEquips.length; i++) {
-                        System.out.println("Introdueix els punts de l'equip " + nomEquips[i] + " : ");
-                        puntsEquips[i] = sc.nextInt();
-                        sc.nextLine();
+                case 6:
+                    if (contador == 4) {
+                        boolean bucle1 = true;
+                        while (bucle1) {
+                            int vicIntroduides = 0;
+                            for (int i = 0; i < contador; i++) {
+                                System.out.println("Introdueix les victòries de l'equip " + nomEquips[i] + " (Com a màxim 3) :");
+                                int resposta = sc.nextInt();
+                                if (resposta > 3 || resposta < 1) {
+                                    System.out.println("Número invàlid");
+                                    break;
+                                } else {
+                                    victoriesEq[i] = resposta;
+                                    vicIntroduides++;
+                                }
+                                if (vicIntroduides == 4) {
+                                    System.out.println("Victòries introduides correctament.");
+                                    bucle1 = false;
+
+                                }
+                            }
+                        }
+                        for (int i = 0; i < contador; i++) {
+                            System.out.println("Victòries de l'equip " + nomEquips[i] + " : " + victoriesEq[i]);
+                        }
+
+                    } else {
+                        System.out.println("No hi han suficients equips per començar la temporada.");
+                        break;
                     }
                     break;
             }
