@@ -9,6 +9,7 @@ public class Gestor {
         String[] jugadorsEquip = new String[12];
         int[] puntsEquips = new int[4];
         int[] victoriesEq = new int[nomEquips.length];
+        int[] derrotesEq = new int[nomEquips.length];
         String equip;
         int contador = 0;
         int opcio;
@@ -155,7 +156,7 @@ public class Gestor {
                     } else {
                         for (int i = 0; i < nomEquips.length; i++) {
                             if (nomEquips[i] != null) {
-                                System.out.println((index + 1) + " - " + (nomEquips[i]+". Victòries: "+victoriesEq[i]));
+                                System.out.println((index + 1) + " - " + (nomEquips[i] + ". Victòries: " + victoriesEq[i]));
                                 index++;
                             }
                         }
@@ -175,24 +176,55 @@ public class Gestor {
                         while (bucle1) {
                             int vicIntroduides = 0;
                             for (int i = 0; i < contador; i++) {
-                                System.out.println("Introdueix les victòries de l'equip " + nomEquips[i] + " (Com a màxim 3) :");
-                                int resposta = sc.nextInt();
-                                if (resposta > 3 || resposta < 1) {
-                                    System.out.println("Número invàlid");
-                                    break;
-                                } else {
-                                    victoriesEq[i] = resposta;
-                                    vicIntroduides++;
-                                }
-                                if (vicIntroduides == 4) {
-                                    System.out.println("Victòries introduides correctament.");
-                                    bucle1 = false;
-
+                                int resposta = -1;
+                                while (!(resposta >= 0 && resposta <= 3)) {
+                                    System.out.println("Introdueix les victòries de l'equip " + nomEquips[i] + " (Com a màxim 3) :");
+                                    resposta = sc.nextInt();
+                                    if (!(resposta >= 0 && resposta <= 3)) {
+                                        System.out.println("Número invàlid");
+                                        continue;
+                                    } else {
+                                        victoriesEq[i] = resposta;
+                                        vicIntroduides++;
+                                    }
+                                    if (vicIntroduides == 4) {
+                                        System.out.println("Victòries introduides correctament.");
+                                        bucle1 = false;
+                                    }
                                 }
                             }
                         }
                         for (int i = 0; i < contador; i++) {
                             System.out.println("Victòries de l'equip " + nomEquips[i] + " : " + victoriesEq[i]);
+                        }
+
+                        while (true) {
+                            int derIntroduides = 0;
+
+                            for (int i = 0; i < nomEquips.length; i++) {
+
+                                if (victoriesEq[i] == 3) {
+                                    derrotesEq[i] = 0;
+                                    derIntroduides++;
+                                } else if (victoriesEq[i] == 2) {
+                                    derrotesEq[i] = 1;
+                                    derIntroduides++;
+                                } else if (victoriesEq[i] == 1) {
+                                    derrotesEq[i] = 2;
+                                    derIntroduides++;
+                                } else if (victoriesEq[i] == 0) {
+                                    derrotesEq[i] = 3;
+                                    derIntroduides++;
+                                }
+
+                            }
+                            if (derIntroduides == 4) {
+                                break;
+                            }
+                            System.out.println("Les derrotes s'han introduit automàticament.");
+                        }
+                        for (int i = 0; i < nomEquips.length; i++) {
+                            System.out.println(nomEquips[i] + " - " + " Victóries: " + victoriesEq[i] + " Derrotes: " + derrotesEq[i]);
                         }
 
                     } else {
