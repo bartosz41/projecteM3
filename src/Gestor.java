@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Gestor {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        String[] nomEquips = new String[4];
-        String[] jugadorsEquip = new String[12];
+
+        String[][] nomEquips = new String[4][4];
+        String[][] jugadorsEquip = new String[12][2];
         int[] puntsEquips = new int[4];
         int[] victoriesEq = new int[nomEquips.length];
         int[] derrotesEq = new int[nomEquips.length];
@@ -20,6 +22,7 @@ public class Gestor {
         int contadorJugadors = 0;
         int contadorDerrotes = 0;
         int contadorRendiment = 0;
+        int comptadorFor = 0;
 
         System.out.println("#######################");
         System.out.println("Equips de la temporada.");
@@ -76,33 +79,67 @@ public class Gestor {
                                 break;
                             } else if (opcio1.equalsIgnoreCase("1")) {
                                 while (true) {
-                                    System.out.println("Introdueix un equip (SIGLES) (0 per finalitzar.): ");
-                                    equip = sc.nextLine();
-                                    if (equip.equals("0")) {
-                                        break;
-                                    }
-                                    if (equip.length() == 3 && equip.equals(equip.toUpperCase())) {
-                                        nomEquips[contador] = equip;
-                                        contador++;
-                                    } else {
-                                        System.out.println();
-                                        System.out.println("Nom invàlid.");
-                                    }
-
                                     if (contador == 4) {
+                                        System.out.println("Has introduit tots els equips, primer esborra un.");
                                         break;
+                                    } else {
+                                        System.out.println("Introdueix un equip (SIGLES) (0 per finalitzar.): ");
+                                        equip = sc.nextLine();
+                                        if (equip.equals("0")) {
+                                            break;
+                                        }
+                                        if (equip.length() == 3 && equip.equals(equip.toUpperCase())) {
+                                            if (nomEquips[contador][0] == null) {
+                                                nomEquips[contador][0] = equip;
+                                                contador++;
+                                            } else {
+                                                continue;
+                                            }
+                                        } else {
+                                            System.out.println();
+                                            System.out.println("Nom invàlid.");
+                                        }
+
+                                        if (contador == 4) {
+                                            break;
+                                        }
                                     }
                                 }
                             } else if (opcio1.equalsIgnoreCase("2")) {
-                                for (int i = 0; i < jugadorsEquip.length; i++) {
-                                    System.out.println("Entra el nom del jugador (Només nom | 0 per sortir): ");
-                                    String resposta = sc.nextLine();
-                                    if (resposta.equals("0")) {
-                                        break;
-                                    } else {
-                                        jugadorsEquip[i] = resposta;
-                                        System.out.println("Jugador introduït correctament.");
-                                        contadorJugadors++;
+                                System.out.println("De quin equip vols introduir un jugador?: ");
+                                String equipAIntroduir = sc.nextLine();
+
+                                if (equipAIntroduir.equalsIgnoreCase("0")) {
+                                    break;
+                                } else {
+                                    int intents = 0;
+                                    boolean trobat = false;
+                                    for (int i = 0; i < nomEquips.length; i++) {
+
+                                        if (equipAIntroduir.equalsIgnoreCase(nomEquips[i][0])) {
+                                            trobat = true;
+                                        } else {
+                                            if (intents == 3) {
+                                                break;
+                                            }
+                                        }
+
+                                        if (trobat = true) {
+                                            System.out.println("Nom del jugador " + ("#" + (i + 1)) + " :");
+                                            String nomJugador = sc.nextLine();
+
+                                            if (jugadorsEquip[comptadorFor][0] == null) {
+                                                jugadorsEquip[comptadorFor][0] = nomJugador;
+                                                jugadorsEquip[comptadorFor][1] = equipAIntroduir;
+                                                contadorJugadors++;
+                                                System.out.println("Jugador introduit correctament.");
+
+                                            } else {
+                                                continue;
+                                            }
+                                        }
+                                        intents++;
+                                        comptadorFor++;
                                     }
                                 }
                             }
@@ -111,82 +148,106 @@ public class Gestor {
                     case "2":
                         System.out.println("Entra el nom del equip a editar: ");
                         nomEquipaEditar = sc.nextLine();
-
-                        while (true) {
-                            int i = 0;
-                            if (nomEquipaEditar.equalsIgnoreCase(nomEquips[i])) {
-                                System.out.println("Equip a editar: " + nomEquips[i]);
-                                System.out.println("Que vols modificar? ");
-                                System.out.println("0 - Sortir.");
-                                System.out.println("1 - Nom del equip.");
-                                System.out.println("2 - Nom del jugador.");
-                                opcioEditar = sc.nextInt();
-                                sc.nextLine();
-                                if (opcioEditar == 0) {
-                                    break;
-                                } else if (opcioEditar == 1) {
-                                    System.out.println("Introdueix el nou nom de l'equip: ");
-                                    String nouNomEq = sc.nextLine();
-                                    if (nouNomEq.length() == 3 && nouNomEq.equals(nouNomEq.toUpperCase())) {
-                                        nomEquips[i] = nouNomEq;
-                                        Arrays.sort(nomEquips);
-                                        System.out.println("El nou nom de l'equip és: " + nomEquips[i]);
+                        if (nomEquipaEditar.equalsIgnoreCase("0")) {
+                            break;
+                        } else {
+                            while (true) {
+                                int i = 0;
+                                if (nomEquipaEditar.equalsIgnoreCase(nomEquips[i][0])) {
+                                    System.out.println("Equip a editar: " + nomEquips[i]);
+                                    System.out.println("Que vols modificar? ");
+                                    System.out.println("0 - Sortir.");
+                                    System.out.println("1 - Nom del equip.");
+                                    System.out.println("2 - Nom del jugador.");
+                                    opcioEditar = sc.nextInt();
+                                    sc.nextLine();
+                                    if (opcioEditar == 0) {
                                         break;
-                                    } else if (opcioEditar == 2) {
-                                        System.out.println("Introdueix el nom del jugador: ");
-                                        String nouNomJg = sc.nextLine();
-                                        for (int y = 0; y < contadorJugadors; y++) {
-                                            if (nouNomJg.equalsIgnoreCase(jugadorsEquip[i])) {
-                                                jugadorsEquip[i] = nouNomJg;
-                                                System.out.println("El nou nom del jugador és: " + jugadorsEquip[i]);
-                                                break;
-                                            }
+                                    } else if (opcioEditar == 1) {
+                                        System.out.println("Introdueix el nou nom de l'equip: ");
+                                        String nouNomEq = sc.nextLine();
+                                        if (nouNomEq.length() == 3 && nouNomEq.equals(nouNomEq.toUpperCase())) {
+                                            nomEquips[i][0] = nouNomEq;
+                                            Arrays.sort(nomEquips);
+                                            System.out.println("El nou nom de l'equip és: " + nomEquips[i]);
+                                            break;
+                                        } else if (opcioEditar == 2) {
+
                                         }
+                                    } else {
+                                        System.out.println("Error, torna a provar-ho.");
+                                        continue;
                                     }
                                 } else {
-                                    System.out.println("Error, torna a provar-ho.");
-                                    continue;
+                                    System.out.println("Equip no trobat.");
+                                    break;
                                 }
-                            } else {
-                                System.out.println("Equip no trobat.");
-                                break;
+                                i++;
                             }
-                            i++;
                         }
                         break;
                     case "3":
-                        System.out.println("Introdueix el nom de l'equip a esborrar: ");
+                        System.out.println("Introdueix el nom de l'equip a esborrar (0 per sortir): ");
                         String equipAEsborrar = sc.nextLine();
-                        if (equipAEsborrar.length() == 3) {
-                            boolean trobat = false;
-                            for (int i = 0; i < nomEquips.length; i++) {
-                                if (nomEquips[i].equals(equipAEsborrar)) {
-                                    trobat = true;
-                                    System.out.println("Estàs segur de voler esborrar " + equipAEsborrar + " ? S/N");
-                                    String resposta = sc.nextLine();
-                                    if (resposta.equals("S")) {
-                                        nomEquips[i] = null;
-                                        System.out.println("L'equip s'ha esborrat correctament. ");
-                                    } else if (resposta.equals("N")) {
-                                        System.out.println("L'equip NO s'ha esborrat.");
-                                        break;
-                                    } else {
-                                        System.out.println("Resposta no vàlida.");
-                                        continue;
+                        if (equipAEsborrar.equalsIgnoreCase("0")) {
+                            break;
+                        } else {
+                            if (equipAEsborrar.length() == 3) {
+                                boolean trobat = false;
+                                for (int i = 0; i < nomEquips.length; i++) {
+                                    if (nomEquips[i].equals(equipAEsborrar)) {
+                                        trobat = true;
+                                        System.out.println("Estàs segur de voler esborrar " + equipAEsborrar + " ? S/N");
+                                        String resposta = sc.nextLine();
+                                        if (resposta.equals("S")) {
+                                            nomEquips[i] = null;
+                                            System.out.println("L'equip s'ha esborrat correctament. ");
+                                            contador--;
+                                        } else if (resposta.equals("N")) {
+                                            System.out.println("L'equip NO s'ha esborrat.");
+                                            break;
+                                        } else {
+                                            System.out.println("Resposta no vàlida.");
+                                            continue;
+                                        }
+                                    }
+                                    if (i == nomEquips.length - 1 && !trobat) {
+                                        System.out.println("Equip no trobat. ");
                                     }
                                 }
-                                if (i == nomEquips.length - 1 && !trobat) {
-                                    System.out.println("Equip no trobat. ");
-                                }
+                            } else {
+                                System.out.println("El nom de l'equip és invàlid, assegurat de que és el mateix nom.");
+                                break;
                             }
-                        } else {
-                            System.out.println("El nom de l'equip és invàlid, assegurat de que és el mateix nom.");
-                            break;
                         }
                         break;
                     case "4":
                         if (temporada = true) {
-                            System.out.println("RANKING NO DISPONIBLE");
+                            int contador1 = 0;
+                            int contador2 = 3;
+
+                            for (int i = 0; i < nomEquips.length; i++) {
+                                if (nomEquips[i][1].equalsIgnoreCase("3")) {
+                                    System.out.println(nomEquips[i][0] + " - Victòries: "+ nomEquips[i][1]+".");
+                                }
+                            }
+                            for (int i = 0; i < nomEquips.length; i++) {
+                                if (nomEquips[i][1].equalsIgnoreCase("2")) {
+                                    System.out.println(nomEquips[i][0] + " - Victòries: "+ nomEquips[i][1]+".");
+                                }
+                            }
+                            for (int i = 0; i < nomEquips.length; i++) {
+                                if (nomEquips[i][1].equalsIgnoreCase("1")) {
+                                    System.out.println(nomEquips[i][0] + " - Victòries: "+ nomEquips[i][1]+".");
+                                }
+                            }
+
+                            for (int i = 0; i < nomEquips.length; i++) {
+                                if (nomEquips[i][1].equalsIgnoreCase("0")) {
+                                    System.out.println(nomEquips[i][0] + " - Victòries: "+ nomEquips[i][1]+".");
+                                }
+                            }
+
                         } else {
                             System.out.println("Primer has de començar la temporada.");
                             break;
@@ -200,10 +261,10 @@ public class Gestor {
                             System.out.println("Equips registrats.");
                             System.out.println("##################");
                             System.out.println();
-                            Arrays.sort(nomEquips);
+                            Arrays.sort(nomEquips, Comparator.comparing(o -> o[0]));
                             for (int i = 0; i < nomEquips.length; i++) {
                                 if (nomEquips[i] != null) {
-                                    System.out.println((index + 1) + " - " + (nomEquips[i] + ". Victòries: " + victoriesEq[i]));
+                                    System.out.println((index + 1) + " - " + (nomEquips[i][0] + "."));
                                     index++;
                                 }
                             }
@@ -213,11 +274,12 @@ public class Gestor {
                         }
                         break;
                     case "6":
-                        if (!(contadorJugadors < 0)) {
+                        if (!(contadorJugadors == 0)) {
                             System.out.println("Total jugadors: " + contadorJugadors);
                             for (int i = 0; i < jugadorsEquip.length; i++) {
-                                if (jugadorsEquip[i] != null) {
-                                    System.out.println((i + 1) + " - " + jugadorsEquip[i]);
+                                if (jugadorsEquip[i][0] != null) {
+                                    System.out.println("#" + (i + 1) + " - " + jugadorsEquip[i][0] + " Equip: " + jugadorsEquip[i][1]);
+
                                 }
                             }
                         } else {
@@ -232,16 +294,17 @@ public class Gestor {
                             while (bucle1) {
                                 int vicIntroduides = 0;
                                 for (int i = 0; i < contador; i++) {
-                                    int resposta = -1;
-                                    while (!(resposta >= 0 && resposta <= 3)) {
-                                        System.out.println("Introdueix les victòries de l'equip " + nomEquips[i] + " (Com a màxim 3) :");
-                                        resposta = sc.nextInt();
-                                        if (!(resposta >= 0 && resposta <= 3)) {
+                                    String resposta = "-1";
+                                    while (!(resposta.equalsIgnoreCase("0")) && !(resposta.equalsIgnoreCase("1")) && !(resposta.equalsIgnoreCase("2")) && !(resposta.equalsIgnoreCase("3"))) {
+                                        System.out.println("Introdueix les victòries de l'equip " + nomEquips[i][0] + " (Com a màxim 3) :");
+                                        resposta = sc.nextLine();
+
+                                        if (resposta.equalsIgnoreCase("0") || resposta.equalsIgnoreCase("1") || resposta.equalsIgnoreCase("2") || resposta.equalsIgnoreCase("3")) {
+                                            nomEquips[i][1] = resposta;
+                                            vicIntroduides++;
+                                        } else {
                                             System.out.println("Número invàlid");
                                             continue;
-                                        } else {
-                                            victoriesEq[i] = resposta;
-                                            vicIntroduides++;
                                         }
                                         if (vicIntroduides == 4) {
                                             System.out.println("Victòries introduides correctament.");
@@ -250,25 +313,22 @@ public class Gestor {
                                     }
                                 }
                             }
-                            for (int i = 0; i < contador; i++) {
-                                System.out.println("Victòries de l'equip " + nomEquips[i] + " : " + victoriesEq[i]);
-                            }
 
                             while (true) {
                                 int derIntroduides = 0;
 
                                 for (int i = 0; i < nomEquips.length; i++) {
 
-                                    if (victoriesEq[i] == 3) {
+                                    if (nomEquips[i][1].equalsIgnoreCase("3")) {
                                         derrotesEq[i] = 0;
                                         derIntroduides++;
-                                    } else if (victoriesEq[i] == 2) {
+                                    } else if (nomEquips[i][1].equalsIgnoreCase("2")) {
                                         derrotesEq[i] = 1;
                                         derIntroduides++;
-                                    } else if (victoriesEq[i] == 1) {
+                                    } else if (nomEquips[i][1].equalsIgnoreCase("1")) {
                                         derrotesEq[i] = 2;
                                         derIntroduides++;
-                                    } else if (victoriesEq[i] == 0) {
+                                    } else if (nomEquips[i][1].equalsIgnoreCase("0")) {
                                         derrotesEq[i] = 3;
                                         derIntroduides++;
                                     }
@@ -281,7 +341,7 @@ public class Gestor {
                                 System.out.println("Les derrotes s'han introduit automàticament.");
                             }
                             for (int i = 0; i < nomEquips.length; i++) {
-                                System.out.println(nomEquips[i] + " - " + " Victóries: " + victoriesEq[i] + " Derrotes: " + derrotesEq[i]);
+                                System.out.println(nomEquips[i][0] + " - " + " Victóries: " + nomEquips[i][1] + " Derrotes: " + derrotesEq[i]);
                             }
 
                         } else {
@@ -294,7 +354,7 @@ public class Gestor {
                             if (contadorDerrotes == 1) {
                                 System.out.println("#### EQUIPS ####");
                                 for (int i = 0; i < nomEquips.length; i++) {
-                                    System.out.println(nomEquips[i] + " - " + " Victóries: " + victoriesEq[i] + " Derrotes: " + derrotesEq[i]);
+                                    System.out.println(nomEquips[i][0] + " - " + " Victóries: " + nomEquips[i][1] + " Derrotes: " + derrotesEq[i]);
                                 }
                             } else {
                                 System.out.println("Primer has de començar la temporada.");
@@ -343,7 +403,7 @@ public class Gestor {
                             if (contadorRendiment != 0) {
                                 System.out.println("#### JUGADORS ####");
                                 for (int i = 0; i < contadorJugadors; i++) {
-                                    System.out.println(jugadorsEquip[i] + " : " + rendimentJugadors[i] + ".");
+                                    System.out.println(jugadorsEquip[i][0] + " : " + rendimentJugadors[i] + ".");
                                 }
                             } else {
                                 System.out.println("No s'ha introduit cap rendiment.");
